@@ -5,15 +5,19 @@
  */
 
 var app = require('../app');
+var connect = require('./../database/db');
 var debug = require('debug')('blog-site:server');
+var debugDb = require('debug')('blog-site:database');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
+
+
 
 /**
  * Create HTTP server.
@@ -22,12 +26,15 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
- * Listen on provided port, on all network interfaces.
+ * Listen on provided port, on all network interfaces and connect to MongoDB.
  */
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+server.on('listening', onListeningDb);
+server.on('error', onErrorDb);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -87,4 +94,22 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+/**
+ * Event listener for MongoDB connection "success" event.
+ */
+
+async function onListeningDb() {
+  await connect(process.env.MONGO_URI);
+  debugDb('MongoDB connection success');
+}
+
+/**
+ * Event listener for MongoDB connection "error" event.
+ */
+
+async function onErrorDb(error) {
+  debugDb(`MongoDB connection error: ${error}, exiting...`);
+  process.exit(1);
 }
