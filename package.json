@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "compile": "sass --watch public/sass/style.scss:public/css/style.css"
+    "compile:sass": "sass --watch public/sass/style.scss:public/css/style.css"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

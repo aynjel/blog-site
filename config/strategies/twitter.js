@@ -1,6 +1,6 @@
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
-const User = require("../database/schema/user");
+const User = require("../../database/schema/user");
 
 const twitterStrategy = () => {
     passport.use(new TwitterStrategy({

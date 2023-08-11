@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
+const debug = require('debug')('blog-site:database');
 
-async function connect(MONGO_URI) {
+async function connect() {
     try {
-        await mongoose.connect(MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI);
+        debug('Database connected');
     } catch (error) {
-        console.log(`MongoDB connection error: ${error}, exiting...`);
+        console.error(error);
+        debug('Error connecting to database');
     }
 }
 
